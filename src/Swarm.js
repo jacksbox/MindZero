@@ -2,11 +2,11 @@ import Dot from './Dot'
 
 class Swarm {
   constructor(size, ctx) {
-    this.dots = (new Array(size)).fill(null).map(() => new Dot(400, 400, ctx))
+    this.dots = (new Array(size)).fill(null).map(() => new Dot(400, 800, ctx))
   }
 
-  move() {
-    this.dots.forEach(dot => dot.move())
+  update() {
+    this.dots.forEach(dot => dot.update())
   }
 
   draw() {
