@@ -1,9 +1,10 @@
 import Brain from './Brain'
 
-import {  vAdd, vLimit } from './Vector'
+import {  vAdd, vLimit, vDist } from './Vector'
 
 class Dot {
   constructor(x, y, ctx) {
+    this.start = { x, y }
     this.size = 4
     this.pos = {
        x,
@@ -17,12 +18,18 @@ class Dot {
     this.brain = new Brain
     this.dead = false
     this.goal = false
+    this.fitness = 0
+    this.champ = false
   }
 
   draw() {
     this.ctx.beginPath();
     this.ctx.arc(this.pos.x - this.size / 2, this.pos.y - this.size / 2, this.size, 0, 2 * Math.PI);
-    this.ctx.fillStyle = 'black';
+    if (this.champ) {
+      this.ctx.fillStyle = 'black';
+    } else {
+      this.ctx.fillStyle = 'green';
+    }
     this.ctx.fill();
   }
 
@@ -49,6 +56,19 @@ class Dot {
     vAdd(this.pos, this.vel)
 
     this.brain.next()
+  }
+
+  calcFitness() {
+    this.fitness = 1 / Math.pow(vDist(this.pos, { x: 400, y: 80 }), 2)
+    if (this.goal) {
+      this.fitness += 1 / Math.pow(this.brain.step, 2)
+    }
+  }
+
+  getChild() {
+    const child = new Dot(this.start.x, this.start.y, this.ctx)
+    child.brain = this.brain.clone()
+    return child
   }
 }
 

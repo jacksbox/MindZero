@@ -16,3 +16,5 @@ export const vLimit = (a, l) => {
   a.x = limit(a.x, l)
   a.y = limit(a.y, l)
 }
+
+export const vDist = (v1, v2) => Math.sqrt(Math.pow(v1.x - v2.x, 2) + Math.pow(v1.y - v2.y, 2))
