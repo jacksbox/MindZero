@@ -30,7 +30,7 @@ class Brain {
   }
 
   mutate() {
-    const threshold = 0.01
+    const threshold = 0.1
     this.directions = this.directions.map(v => {
       if (Math.random() < threshold) {
         return {
