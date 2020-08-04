@@ -40,6 +40,12 @@ class Dot {
       if (this.pos.x < 0 || this.pos.x > 800 || this.pos.y < 0 || this.pos.y > 800) {
         this.dead = true
       }
+      if (
+        (this.pos.x >= 100 && this.pos.x <= 700) &&
+        (this.pos.y >= 300 && this.pos.y <= 310)
+      ) {
+        this.dead = true
+      }
       if (Math.abs(this.pos.x - 400) < 6 && Math.abs(this.pos.y - 80) < 6) {
         this.goal = true
       }
