@@ -5,10 +5,10 @@ const len = 500
 let id = 0
 
 class Brain {
-  constructor() {
+  constructor(maxStep = len - 1) {
     this.directions = (new Array(len)).fill(null).map(() => ({ x: rand(0, 2) - 1, y: rand(0, 2) - 1 }))
     this.step = 0
-    this.maxStep = len - 1
+    this.maxStep = maxStep
     this.id = id++
   }
 
@@ -29,10 +29,13 @@ class Brain {
     return theClone
   }
 
-  mutate() {
-    const threshold = 0.1
+  mutate(hasHitGoal) {
+    const threshold = hasHitGoal ? 0.005 : 0.01
+    const maxSequence = hasHitGoal ? Math.floor(rand(0, 3)) : Math.floor(rand(0,8))
+    let sequence = 0
     this.directions = this.directions.map(v => {
-      if (Math.random() < threshold) {
+      if (sequence > 0 || Math.random() < threshold) {
+        sequence = sequence > 0 ? sequence-- : maxSequence
         return {
           x: rand(0, 2) - 1,
           y: rand(0, 2) - 1
