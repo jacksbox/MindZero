@@ -26,9 +26,9 @@ class Dot {
     this.ctx.beginPath();
     this.ctx.arc(this.pos.x - this.size / 2, this.pos.y - this.size / 2, this.size, 0, 2 * Math.PI);
     if (this.champ) {
-      this.ctx.fillStyle = 'black';
-    } else {
       this.ctx.fillStyle = 'green';
+    } else {
+      this.ctx.fillStyle = 'black';
     }
     this.ctx.fill();
   }
@@ -51,7 +51,7 @@ class Dot {
       this.dead = true
       return
     }
-    vAdd(this.vel, this.brain)
+    vAdd(this.vel, this.brain.get())
     vLimit(this.vel, 4)
     vAdd(this.pos, this.vel)
 
@@ -61,13 +61,14 @@ class Dot {
   calcFitness() {
     this.fitness = 1 / Math.pow(vDist(this.pos, { x: 400, y: 80 }), 2)
     if (this.goal) {
-      this.fitness += 1 / Math.pow(this.brain.step, 2)
+      this.fitness += 1/16 +  1/ (this.brain.step * this.brain.step)
     }
   }
 
-  getChild() {
+  getChild(maxStep) {
     const child = new Dot(this.start.x, this.start.y, this.ctx)
     child.brain = this.brain.clone()
+    child.brain.maxStep = maxStep
     return child
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "MindZiro",
-  "author": "Mario Jäckle<github@jacksbox.de>"
+  "author": "Mario Jäckle<github@jacksbox.de>",
   "version": "1.0.0",
   "description": "Playing around with machine learning. Based on https://www.youtube.com/watch?v=BOZfhUcNiqk",
   "main": "index.html",

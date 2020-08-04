@@ -1,4 +1,5 @@
 import Dot from './Dot'
+import stats from './Stats'
 
 const rand = max => Math.random() * max
 
@@ -13,17 +14,19 @@ class Swarm {
     this.calcFitness()
     this.calcFitnessSum()
     const best = this.selectBest()
-    const bestChild = best.getChild()
+    const maxStep = best.brain.step
+    const bestChild = best.getChild(maxStep)
+    bestChild.brain.id = best.brain.id
     bestChild.champ = true
 
     this.dots = this.dots.map(() => {
       const dot = this.selectParent()
-      return dot.getChild()
+      return dot.getChild(maxStep)
     })
 
-    this.dots[this.dots.length - 1] = bestChild
-
     this.mutate()
+
+    this.dots[this.dots.length - 1] = bestChild
   }
 
   mutate() {
@@ -39,12 +42,8 @@ class Swarm {
       }
     }
 
-    let worst = this.dots[0]
-    for (let i = 1; i < len; i++) {
-      if (this.dots[i].fitness < worst.fitness) {
-        worst = this.dots[i]
-      }
-    }
+    stats.minSteps = dot.brain.step
+    stats.champIds.push(dot.brain.id)
 
     return dot
   }
