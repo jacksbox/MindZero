@@ -14,7 +14,7 @@ class Swarm {
     this.calcFitness()
     this.calcFitnessSum()
     const best = this.selectBest()
-    const maxStep = best.brain.step
+    const maxStep = best.goal ? best.brain.step : best.brain.maxStep
     const bestChild = best.getChild(maxStep)
     bestChild.brain.id = best.brain.id
     bestChild.champ = true
@@ -49,7 +49,7 @@ class Swarm {
   }
 
   selectParent() {
-    const r = rand(this.fitnessSum);
+    const r = rand(this.fitnessSum) / 2;
 
     let runningSum = 0;
 
