@@ -1,14 +1,20 @@
 class Stats {
   constructor() {
     this.gen = 0
-    this.minSteps = 999
-    this.champIds = []
   }
 
-  update() {
+  update(...swarms) {
     document.getElementById('gen').innerHTML = this.gen
-    document.getElementById('minSteps').innerHTML = this.minSteps
-    document.getElementById('champIds').innerHTML = this.champIds.join('<br/>')
+    swarms.forEach(swarm => {
+      document.getElementById(swarm.color).innerHTML = swarm.bestSteps
+    })
+  }
+
+  createDiv(color) {
+    const div = document.createElement("div")
+    div.id = color
+    div.style = `color: ${color}; padding: 10px`
+    document.getElementById('steps').appendChild(div)
   }
 }
 

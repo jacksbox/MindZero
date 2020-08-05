@@ -4,10 +4,15 @@ import stats from './Stats'
 const rand = max => Math.random() * max
 
 class Swarm {
-  constructor(size, ctx) {
+  constructor(size, ctx, color) {
     this.size = size
     this.ctx = ctx
+    this.color = color
     this.dots = (new Array(this.size)).fill(null).map(() => new Dot(400, 700, this.ctx))
+
+    const bestSteps = '-'
+
+    stats.createDiv(color)
   }
 
   evolve() {
@@ -19,14 +24,16 @@ class Swarm {
     bestChild.brain.id = best.brain.id
     bestChild.champ = true
 
-    let randomChilds = 100
+    this.bestSteps = best.goal ? best.brain.step : best.brain.maxStep
+
+    // let randomChilds = 100
     this.dots = this.dots.map(() => {
-      if (randomChilds > 0) {
-        randomChilds--
-        const dot = new Dot(400, 700, this.ctx, maxStep)
-        dot.isRandom = true
-        return dot
-      }
+      // if (randomChilds > 0) {
+      //   randomChilds--
+      //   const dot = new Dot(400, 700, this.ctx, maxStep)
+      //   dot.isRandom = true
+      //   return dot
+      // }
       const dot = this.selectParent()
       return dot.getChild(maxStep)
     })
@@ -50,7 +57,6 @@ class Swarm {
     }
 
     stats.minSteps = dot.goal ? dot.brain.step : '-'
-    stats.champIds.push(dot.brain.id)
 
     return dot
   }
@@ -82,7 +88,7 @@ class Swarm {
   }
 
   draw() {
-    this.dots.forEach(dot => dot.draw())
+    this.dots.forEach(dot => dot.draw(this.color))
   }
 
   allStopped() {

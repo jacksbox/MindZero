@@ -25,7 +25,7 @@ class Dot {
     this.hasHitGoal = false
   }
 
-  draw() {
+  draw(color) {
     this.ctx.beginPath();
     this.ctx.arc(this.pos.x - this.size / 2, this.pos.y - this.size / 2, this.size, 0, 2 * Math.PI);
     if (this.champ) {
@@ -33,7 +33,7 @@ class Dot {
     } else if(this.isRandom){
       this.ctx.fillStyle = 'purple';
     } else {
-      this.ctx.fillStyle = 'black';
+      this.ctx.fillStyle = color;
     }
     this.ctx.fill();
   }
@@ -71,12 +71,12 @@ class Dot {
   }
 
   calcFitness() {
-    this.fitness = 1 / Math.pow(vDist(this.pos, { x: 400, y: 80 }), 2)
+    this.fitness = this.goal ? 1 : 1 / Math.pow(vDist(this.pos, { x: 400, y: 80 }), 2)
     if (this.hitObstacle) {
       this.fitness /= 2
     } else
     if (this.goal) {
-      this.fitness = this.fitness * 1.5 + +  1 / (this.brain.step * this.brain.step)
+      this.fitness = this.fitness * 1.5 + +  100 / (this.brain.step * this.brain.step)
       // this.fitness += 1/16 +  1/ (this.brain.step * this.brain.step)
     }
   }

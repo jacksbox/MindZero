@@ -31,7 +31,8 @@ class Brain {
 
   mutate(hasHitGoal) {
     const threshold = hasHitGoal ? 0.005 : 0.01
-    const maxSequence = hasHitGoal ? Math.floor(rand(0, 3)) : Math.floor(rand(0,8))
+    // const maxSequence = hasHitGoal ? Math.floor(rand(0, 3)) : Math.floor(rand(0,8))
+    const maxSequence = 0
     let sequence = 0
     this.directions = this.directions.map(v => {
       if (sequence > 0 || Math.random() < threshold) {
