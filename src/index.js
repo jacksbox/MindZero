@@ -1,4 +1,5 @@
 import Swarm from './Swarm'
+import Goal from './Goal'
 import stats from './Stats'
 
 const canvas = document.getElementById('canvas')
@@ -7,6 +8,8 @@ const ctx = canvas.getContext('2d')
 let swarm1 = new Swarm(500, ctx, 'purple')
 let swarm2 = new Swarm(500, ctx, 'black')
 let swarm3 = new Swarm(500, ctx, 'orange')
+
+const goal = new Goal(400, 80, 6, 'red')
 
 let gen = 0
 
@@ -29,10 +32,7 @@ const run = () => {
     ctx.fillStyle = 'blue';
     ctx.fill();
 
-    ctx.beginPath();
-    ctx.arc(400, 80, 6, 0, 2 * Math.PI);
-    ctx.fillStyle = 'red';
-    ctx.fill();
+    goal.draw(ctx)
 
     swarm1.update()
     swarm2.update()
