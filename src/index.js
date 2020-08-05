@@ -16,38 +16,34 @@ canvas.height = bounds.h
 
 const origin = new Vec2(400, 700)
 
-const swarm1 = new Swarm(500, 500, 'purple', origin)
-const swarm2 = new Swarm(500, 500, 'black', origin)
-const swarm3 = new Swarm(500, 500, 'orange', origin)
+const swarms = [
+  new Swarm(500, 500, 'purple', origin),
+  new Swarm(500, 500, 'black', origin),
+  new Swarm(500, 500, 'orange', origin),
+  new Swarm(500, 500, 'gray', origin),
+]
 
 const goal = new Goal(400, 80, 6, 'red')
 
-const obstacle = new Obstacle(100, 300, 10, 10)
+const obstacle = new Obstacle(100, 300, 600, 10)
 
-let gen = 0
-
-stats.update()
+stats.init(swarms)
 
 
 const run = () => {
-  if (swarm1.allStopped() && swarm2.allStopped() && swarm3.allStopped()) {
-    swarm1.evolve()
-    swarm2.evolve()
-    swarm3.evolve()
-    stats.gen++
-    stats.update(swarm1, swarm2, swarm3)
+  if (swarms.every(swarm => swarm.allStopped())) {
+    swarms.forEach(swarm => swarm.evolve())
+    stats.update()
   } else {
     bounds.clear(ctx)
 
     obstacle.draw(ctx)
     goal.draw(ctx)
 
-    swarm1.update(goal, obstacle, bounds)
-    swarm2.update(goal, obstacle, bounds)
-    swarm3.update(goal, obstacle, bounds)
-    swarm1.draw(ctx)
-    swarm2.draw(ctx)
-    swarm3.draw(ctx)
+    swarms.forEach(swarm => {
+      swarm.update(goal, obstacle, bounds)
+      swarm.draw(ctx)
+    })
   }
 
   window.requestAnimationFrame(run);

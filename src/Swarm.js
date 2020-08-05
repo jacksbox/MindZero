@@ -12,8 +12,6 @@ class Swarm {
     this.dots = (new Array(this.size)).fill(null).map(() => new Dot(origin.x, origin.y, initialStepLimit))
 
     this.stepsInBestTry = null
-
-    stats.createDiv(color)
   }
 
   evolve() {

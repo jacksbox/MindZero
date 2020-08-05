@@ -1,12 +1,20 @@
 class Stats {
-  constructor() {
+  constructor(swarms) {
     this.gen = 0
   }
 
-  update(...swarms) {
+  init(swarms) {
+    this.swarms = swarms
+    this.swarms.forEach(swarm => this.createDiv(swarm.color))
+
+    this.update()
+  }
+
+  update() {
+    this.gen++
     document.getElementById('gen').innerHTML = this.gen
-    swarms.forEach(swarm => {
-      document.getElementById(swarm.color).innerHTML = swarm.stepsInBestTry || '-'
+    this.swarms.forEach(swarm => {
+      document.getElementById(swarm.color).innerHTML = swarm.stepsInBestTry ? swarm.stepsInBestTry : '-'
     })
   }
 
