@@ -54,11 +54,9 @@ class Dot {
       this.isDead = true
       return
     }
-    this.vel.add(this.brain.get())
+    this.vel.add(this.brain.next())
     this.vel.limit(4)
     this.pos.add(this.vel)
-
-    this.brain.next()
   }
 
   calcFitness() {

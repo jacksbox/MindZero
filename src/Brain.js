@@ -17,14 +17,9 @@ class Brain {
   }
 
   next() {
+    const vec2 = this.directions[this.step]
     this.step++
-  }
-
-  get() {
-    return {
-      x: this.directions[this.step].x,
-      y: this.directions[this.step].y
-    }
+    return vec2
   }
 
   clone(stepLimit = null) {
