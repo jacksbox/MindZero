@@ -8,7 +8,7 @@ module.exports = {
     filename: 'bundle.js'
   },
   devServer: {
-    contentBase: 'dist',
+    publicPath: '/dist/',
     port: 8080,
   }
 };
