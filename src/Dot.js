@@ -38,11 +38,11 @@ class Dot {
 
       if (bounds.isOutOfBounds(this.pos)) {
         this.isDead = true
-      }
+      } else
       if (obstacle.checkCollisionWith(this.pos)) {
         this.isDead = true
         this.hitObstacle = true
-      }
+      } else
       if (goal.checkCollisionWith(this.pos)) {
         this.reachedGoal = true
       }
