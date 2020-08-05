@@ -2,6 +2,9 @@ import Bounds from './Bounds'
 import Swarm from './Swarm'
 import Goal from './Goal'
 import Obstacle from './Obstacle'
+
+import Vec2 from './Vec2'
+
 import stats from './Stats'
 
 const canvas = document.getElementById('canvas')
@@ -11,13 +14,15 @@ const bounds = new Bounds(800, 800)
 canvas.width = bounds.w
 canvas.height = bounds.h
 
-const swarm1 = new Swarm(500, 'purple')
-const swarm2 = new Swarm(500, 'black')
-const swarm3 = new Swarm(500, 'orange')
+const origin = new Vec2(400, 700)
+
+const swarm1 = new Swarm(500, 'purple', origin)
+const swarm2 = new Swarm(500, 'black', origin)
+const swarm3 = new Swarm(500, 'orange', origin)
 
 const goal = new Goal(400, 80, 6, 'red')
 
-const obstacle = new Obstacle(100, 300, 600, 10)
+const obstacle = new Obstacle(100, 300, 10, 10)
 
 let gen = 0
 

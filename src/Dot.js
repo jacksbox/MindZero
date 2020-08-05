@@ -4,23 +4,24 @@ import Vec2 from './Vec2'
 
 class Dot {
   constructor(x, y, maxStep) {
+    this.radius = 4
     this.start = new Vec2(x, y)
-    this.size = 4
     this.pos = new Vec2(x, y)
     this.vel = new Vec2()
     this.brain = new Brain(maxStep)
-    this.isDead = false
-    this.hasHitGoal = false
+
     this.fitness = 0
     this.champ = false
-    this.isRandom = false
-    this.hasHitObstacle = false
+
+    this.isDead = false
+    this.hitObstacle = false
+    this.reachedGoal = false
     this.hasHitGoal = false
   }
 
   draw(color, ctx) {
     ctx.beginPath();
-    ctx.arc(this.pos.x - this.size / 2, this.pos.y - this.size / 2, this.size, 0, 2 * Math.PI);
+    ctx.arc(this.pos.x - this.radius, this.pos.y - this.radius, this.radius, 0, 2 * Math.PI);
     if (this.champ) {
       ctx.fillStyle = 'green';
     } else if(this.isRandom){
@@ -32,7 +33,7 @@ class Dot {
   }
 
   update(goal, obstacle, bounds) {
-    if(!this.isDead && !this.hasHitGoal) {
+    if(!this.isDead && !this.reachedGoal) {
       this.move()
 
       if (bounds.isOutOfBounds(this.pos)) {
@@ -40,10 +41,10 @@ class Dot {
       }
       if (obstacle.checkCollisionWith(this.pos)) {
         this.isDead = true
-        this.hasHitObstacle = true
+        this.hitObstacle = true
       }
       if (goal.checkCollisionWith(this.pos)) {
-        this.hasHitGoal = true
+        this.reachedGoal = true
       }
     }
   }
@@ -61,21 +62,20 @@ class Dot {
   }
 
   calcFitness() {
-    this.fitness = this.hasHitGoal ? 1 : 1 / Math.pow(this.pos.distance(new Vec2(400, 80)), 2)
-    if (this.hasHitObstacle) {
+    this.fitness = this.reachedGoal ? 1 : 1 / Math.pow(this.pos.distance(new Vec2(400, 80)), 2)
+    if (this.hitObstacle) {
       this.fitness /= 2
     } else
-    if (this.hasHitGoal) {
+    if (this.reachedGoal) {
       this.fitness = this.fitness * 1.5 + +  100 / (this.brain.step * this.brain.step)
-      // this.fitness += 1/16 +  1/ (this.brain.step * this.brain.step)
     }
   }
 
   getChild(maxStep) {
-    const child = new Dot(this.start.x, this.start.y, this.ctx)
+    const child = new Dot(this.start.x, this.start.y)
     child.brain = this.brain.clone()
     child.brain.maxStep = maxStep
-    child.hasHitGoal = this.hasHitGoal
+    child.hasHitGoal = this.reachedGoal
     return child
   }
 

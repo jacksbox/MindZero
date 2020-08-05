@@ -4,10 +4,11 @@ import stats from './Stats'
 const rand = max => Math.random() * max
 
 class Swarm {
-  constructor(size, color) {
+  constructor(size, color, origin) {
     this.size = size
     this.color = color
-    this.dots = (new Array(this.size)).fill(null).map(() => new Dot(400, 700))
+    this.origin = origin
+    this.dots = (new Array(this.size)).fill(null).map(() => new Dot(origin.x, origin.y))
 
     const bestSteps = '-'
 
@@ -86,7 +87,7 @@ class Swarm {
   allStopped() {
     const len = this.dots.length
     for (let i = 0; i < len; i++) {
-      if (!this.dots[i].isDead && !this.dots[i].hasHitGoal) {
+      if (!this.dots[i].isDead && !this.dots[i].reachedGoal) {
         return false
       }
     }
