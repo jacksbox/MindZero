@@ -25,7 +25,7 @@ stats.update()
 
 
 const run = () => {
-  if (swarm1.allStopped() & swarm2.allStopped()) {
+  if (swarm1.allStopped() && swarm2.allStopped() && swarm3.allStopped()) {
     swarm1.evolve()
     swarm2.evolve()
     swarm3.evolve()
