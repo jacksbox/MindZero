@@ -4,11 +4,10 @@ import stats from './Stats'
 const rand = max => Math.random() * max
 
 class Swarm {
-  constructor(size, ctx, color) {
+  constructor(size, color) {
     this.size = size
-    this.ctx = ctx
     this.color = color
-    this.dots = (new Array(this.size)).fill(null).map(() => new Dot(400, 700, this.ctx))
+    this.dots = (new Array(this.size)).fill(null).map(() => new Dot(400, 700))
 
     const bestSteps = '-'
 
@@ -30,7 +29,7 @@ class Swarm {
     this.dots = this.dots.map(() => {
       // if (randomChilds > 0) {
       //   randomChilds--
-      //   const dot = new Dot(400, 700, this.ctx, maxStep)
+      //   const dot = new Dot(400, 700, maxStep)
       //   dot.isRandom = true
       //   return dot
       // }
@@ -87,8 +86,8 @@ class Swarm {
     this.dots.forEach(dot => dot.update())
   }
 
-  draw() {
-    this.dots.forEach(dot => dot.draw(this.color))
+  draw(ctx) {
+    this.dots.forEach(dot => dot.draw(this.color, ctx))
   }
 
   allStopped() {

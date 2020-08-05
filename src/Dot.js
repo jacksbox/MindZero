@@ -3,12 +3,11 @@ import Brain from './Brain'
 import Vec2 from './Vec2'
 
 class Dot {
-  constructor(x, y, ctx, maxStep) {
+  constructor(x, y, maxStep) {
     this.start = new Vec2(x, y)
     this.size = 4
     this.pos = new Vec2(x, y)
     this.vel = new Vec2()
-    this.ctx = ctx
     this.brain = new Brain(maxStep)
     this.dead = false
     this.goal = false
@@ -19,17 +18,17 @@ class Dot {
     this.hasHitGoal = false
   }
 
-  draw(color) {
-    this.ctx.beginPath();
-    this.ctx.arc(this.pos.x - this.size / 2, this.pos.y - this.size / 2, this.size, 0, 2 * Math.PI);
+  draw(color, ctx) {
+    ctx.beginPath();
+    ctx.arc(this.pos.x - this.size / 2, this.pos.y - this.size / 2, this.size, 0, 2 * Math.PI);
     if (this.champ) {
-      this.ctx.fillStyle = 'green';
+      ctx.fillStyle = 'green';
     } else if(this.isRandom){
-      this.ctx.fillStyle = 'purple';
+      ctx.fillStyle = 'purple';
     } else {
-      this.ctx.fillStyle = color;
+      ctx.fillStyle = color;
     }
-    this.ctx.fill();
+    ctx.fill();
   }
 
   update() {
