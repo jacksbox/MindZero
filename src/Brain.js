@@ -7,10 +7,10 @@ let id = 0
 import Vec2 from './Vec2'
 
 class Brain {
-  constructor(maxStep = len - 1) {
+  constructor(stepThreshold = len - 1) {
     this.directions = (new Array(len)).fill(null).map(() => new Vec2(randomDir(2), randomDir(2)))
     this.step = 0
-    this.maxStep = maxStep
+    this.stepThreshold = stepThreshold
     this.id = id++
   }
 
@@ -26,18 +26,18 @@ class Brain {
   }
 
   clone() {
-    const theClone = new Brain()
-    theClone.directions = this.directions.map(vec2 => vec2.clone())
-    return theClone
+    const brainClone = new Brain()
+    brainClone.directions = this.directions.map(vec2 => vec2.clone())
+    return brainClone
   }
 
   mutate(hasHitGoal) {
-    const threshold = hasHitGoal ? 0.005 : 0.01
+    const mutationRate = hasHitGoal ? 0.005 : 0.01
     // const maxSequence = hasHitGoal ? Math.floor(rand(0, 3)) : Math.floor(rand(0,8))
     const maxSequence = 0
     let sequence = 0
     this.directions = this.directions.map(vec2 => {
-      if (sequence > 0 || Math.random() < threshold) {
+      if (sequence > 0 || Math.random() < mutationRate) {
         sequence = sequence > 0 ? sequence-- : maxSequence
         return new Vec2(randomDir(2), randomDir(2))
       }

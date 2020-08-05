@@ -10,7 +10,7 @@ class Swarm {
     this.origin = origin
     this.dots = (new Array(this.size)).fill(null).map(() => new Dot(origin.x, origin.y))
 
-    const bestSteps = '-'
+    this.stepsInBestTry = null
 
     stats.createDiv(color)
   }
@@ -18,17 +18,20 @@ class Swarm {
   evolve() {
     this.calcFitness()
     this.calcFitnessSum()
-    const best = this.selectBest()
-    const maxStep = Math.min(Math.floor((best.hasHitGoal ? best.brain.step : best.brain.maxStep) * 1.2), 499)
-    const bestChild = best.getChild(maxStep)
-    bestChild.brain.id = best.brain.id
+    const primus = this.selectPrimus()
+    const newStepThreshold = Math.min(
+      Math.floor((primus.hasHitGoal ? primus.brain.step : primus.brain.stepThreshold) * 1.2),
+      499
+    )
+    const bestChild = primus.getChild(newStepThreshold)
+    bestChild.brain.id = primus.brain.id
     bestChild.champ = true
 
-    this.bestSteps = best.hasHitGoal ? best.brain.step : best.brain.maxStep
+    this.stepsInBestTry = primus.hasHitGoal ? primus.brain.step : primus.brain.stepThreshold
 
     this.dots = this.dots.map(() => {
       const dot = this.selectParent()
-      return dot.getChild(maxStep)
+      return dot.getChild(newStepThreshold)
     })
 
     this.mutate()
@@ -40,7 +43,7 @@ class Swarm {
     this.dots.forEach(dot => dot.mutate())
   }
 
-  selectBest() {
+  selectPrimus() {
     let dot = this.dots[0]
     const len = this.dots.length
     for (let i = 1; i < len; i++) {
@@ -49,7 +52,7 @@ class Swarm {
       }
     }
 
-    stats.minSteps = dot.hasHitGoal ? dot.brain.step : '-'
+    stats.minSteps = dot.hasHitGoal ? dot.brain.step : null
 
     return dot
   }

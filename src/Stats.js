@@ -6,7 +6,7 @@ class Stats {
   update(...swarms) {
     document.getElementById('gen').innerHTML = this.gen
     swarms.forEach(swarm => {
-      document.getElementById(swarm.color).innerHTML = swarm.bestSteps
+      document.getElementById(swarm.color).innerHTML = swarm.stepsInBestTry || '-'
     })
   }
 

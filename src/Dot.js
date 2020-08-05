@@ -50,7 +50,7 @@ class Dot {
   }
 
   move() {
-    if ( this.brain.step === this.brain.maxStep) {
+    if ( this.brain.step === this.brain.stepThreshold) {
       this.isDead = true
       return
     }
@@ -71,10 +71,10 @@ class Dot {
     }
   }
 
-  getChild(maxStep) {
+  getChild(newStepThreshold) {
     const child = new Dot(this.start.x, this.start.y)
     child.brain = this.brain.clone()
-    child.brain.maxStep = maxStep
+    child.brain.stepThreshold = newStepThreshold
     child.hasHitGoal = this.reachedGoal
     return child
   }
