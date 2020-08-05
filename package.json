@@ -2,8 +2,8 @@
   "name": "MindZiro",
   "author": "Mario Jäckle<github@jacksbox.de>",
   "version": "0.1.0",
-  "description": "Playing around with machine learning. Based on https://www.youtube.com/watch?v=BOZfhUcNiqk",
-  "main": "index.html",
+  "description": "An Evolutionary algorithm experiment / playground",
+  "main": "dist/index.html",
   "license": "MIT",
   "scripts": {
     "build": "yarn webpack --mode=production",
