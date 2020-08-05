@@ -7,13 +7,17 @@
   "license": "MIT",
   "scripts": {
     "build": "yarn webpack --mode=production",
-    "dev": "yarn webpack-dev-server"
+    "dev": "yarn webpack-dev-server",
+    "predeploy": "yarn build",
+    "deploy": "yarn gh-pages -d dist"
   },
   "dependencies": {
     "webpack": "^4.44.1",
     "webpack-dev-server": "^3.11.0"
   },
   "devDependencies": {
+    "gh-pages": "^3.1.0",
+    "npm": "^6.14.7",
     "webpack-cli": "^3.3.12"
   }
 }
