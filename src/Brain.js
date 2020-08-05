@@ -1,17 +1,19 @@
 const randomDir = max => (Math.random() * max) - 1
 
-const len = 500
-
 let id = 0
 
 import Vec2 from './Vec2'
 
 class Brain {
-  constructor(stepThreshold = len - 1) {
-    this.directions = (new Array(len)).fill(null).map(() => new Vec2(randomDir(2), randomDir(2)))
+  constructor(stepLimit) {
+    this.directions = (new Array(stepLimit)).fill(null).map(() => new Vec2(randomDir(2), randomDir(2)))
+    this.stepLimit = stepLimit
     this.step = 0
-    this.stepThreshold = stepThreshold
     this.id = id++
+  }
+
+  isEmpty() {
+    return this.step === this.stepLimit - 1
   }
 
   next() {
@@ -25,9 +27,11 @@ class Brain {
     }
   }
 
-  clone() {
-    const brainClone = new Brain()
-    brainClone.directions = this.directions.map(vec2 => vec2.clone())
+  clone(stepLimit = null) {
+    const brainClone = new Brain(0)
+    brainClone.directions = stepLimit
+      ? this.directions.slice(0, stepLimit).map(vec2 => vec2.clone())
+      : this.directions.map(vec2 => vec2.clone())
     return brainClone
   }
 

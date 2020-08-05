@@ -4,11 +4,12 @@ import stats from './Stats'
 const rand = max => Math.random() * max
 
 class Swarm {
-  constructor(size, color, origin) {
+  constructor(size, initialStepLimit, color, origin) {
     this.size = size
+    this.initialStepLimit = initialStepLimit
     this.color = color
     this.origin = origin
-    this.dots = (new Array(this.size)).fill(null).map(() => new Dot(origin.x, origin.y))
+    this.dots = (new Array(this.size)).fill(null).map(() => new Dot(origin.x, origin.y, initialStepLimit))
 
     this.stepsInBestTry = null
 
@@ -19,24 +20,26 @@ class Swarm {
     this.calcFitness()
     this.calcFitnessSum()
     const primus = this.selectPrimus()
-    const newStepThreshold = Math.min(
-      Math.floor((primus.hasHitGoal ? primus.brain.step : primus.brain.stepThreshold) * 1.2),
-      499
+    // evolved dots only can do 1.2 times the amount of steps of the primus
+    const newStepLimit = Math.min(
+      Math.floor((primus.reachedGoal ? (primus.brain.step + 1) : primus.brain.stepLimit) * 1.2),
+      this.initialStepLimit
     )
-    const bestChild = primus.getChild(newStepThreshold)
-    bestChild.brain.id = primus.brain.id
-    bestChild.champ = true
+    const primusChild = primus.getChild(newStepLimit)
 
-    this.stepsInBestTry = primus.hasHitGoal ? primus.brain.step : primus.brain.stepThreshold
+    primusChild.brain.id = primus.brain.id
+    primusChild.primus = true
+
+    this.stepsInBestTry = newStepLimit
 
     this.dots = this.dots.map(() => {
       const dot = this.selectParent()
-      return dot.getChild(newStepThreshold)
+      return dot.getChild(newStepLimit)
     })
 
     this.mutate()
 
-    this.dots[this.dots.length - 1] = bestChild
+    this.dots[this.dots.length - 1] = primusChild
   }
 
   mutate() {
@@ -51,8 +54,6 @@ class Swarm {
         dot = this.dots[i]
       }
     }
-
-    stats.minSteps = dot.hasHitGoal ? dot.brain.step : null
 
     return dot
   }

@@ -16,9 +16,9 @@ canvas.height = bounds.h
 
 const origin = new Vec2(400, 700)
 
-const swarm1 = new Swarm(500, 'purple', origin)
-const swarm2 = new Swarm(500, 'black', origin)
-const swarm3 = new Swarm(500, 'orange', origin)
+const swarm1 = new Swarm(500, 500, 'purple', origin)
+const swarm2 = new Swarm(500, 500, 'black', origin)
+const swarm3 = new Swarm(500, 500, 'orange', origin)
 
 const goal = new Goal(400, 80, 6, 'red')
 

@@ -3,15 +3,15 @@ import Brain from './Brain'
 import Vec2 from './Vec2'
 
 class Dot {
-  constructor(x, y, maxStep) {
+  constructor(x, y, stepLimit) {
     this.radius = 4
     this.start = new Vec2(x, y)
     this.pos = new Vec2(x, y)
     this.vel = new Vec2()
-    this.brain = new Brain(maxStep)
+    this.brain = new Brain(stepLimit)
 
     this.fitness = 0
-    this.champ = false
+    this.primus = false
 
     this.isDead = false
     this.hitObstacle = false
@@ -22,10 +22,10 @@ class Dot {
   draw(color, ctx) {
     ctx.beginPath();
     ctx.arc(this.pos.x - this.radius, this.pos.y - this.radius, this.radius, 0, 2 * Math.PI);
-    if (this.champ) {
-      ctx.fillStyle = 'green';
-    } else if(this.isRandom){
-      ctx.fillStyle = 'purple';
+    if (this.primus) {
+      ctx.strokeStyle = 'green';
+      ctx.lineWidth = 4;
+      ctx.stroke();
     } else {
       ctx.fillStyle = color;
     }
@@ -50,7 +50,7 @@ class Dot {
   }
 
   move() {
-    if ( this.brain.step === this.brain.stepThreshold) {
+    if (this.brain.isEmpty()) {
       this.isDead = true
       return
     }
@@ -71,10 +71,13 @@ class Dot {
     }
   }
 
-  getChild(newStepThreshold) {
-    const child = new Dot(this.start.x, this.start.y)
-    child.brain = this.brain.clone()
-    child.brain.stepThreshold = newStepThreshold
+  getChild(newStepLimit) {
+    // no directions in childs brain
+    const child = new Dot(this.start.x, this.start.y, 0)
+    // clone with step limit
+    child.brain = this.brain.clone(newStepLimit)
+    child.brain.stepLimit = newStepLimit
+    // used for mutation sequences
     child.hasHitGoal = this.reachedGoal
     return child
   }
