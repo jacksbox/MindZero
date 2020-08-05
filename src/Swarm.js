@@ -18,21 +18,14 @@ class Swarm {
     this.calcFitness()
     this.calcFitnessSum()
     const best = this.selectBest()
-    const maxStep = Math.min(Math.floor((best.goal ? best.brain.step : best.brain.maxStep) * 1.2), 499)
+    const maxStep = Math.min(Math.floor((best.hasHitGoal ? best.brain.step : best.brain.maxStep) * 1.2), 499)
     const bestChild = best.getChild(maxStep)
     bestChild.brain.id = best.brain.id
     bestChild.champ = true
 
-    this.bestSteps = best.goal ? best.brain.step : best.brain.maxStep
+    this.bestSteps = best.hasHitGoal ? best.brain.step : best.brain.maxStep
 
-    // let randomChilds = 100
     this.dots = this.dots.map(() => {
-      // if (randomChilds > 0) {
-      //   randomChilds--
-      //   const dot = new Dot(400, 700, maxStep)
-      //   dot.isRandom = true
-      //   return dot
-      // }
       const dot = this.selectParent()
       return dot.getChild(maxStep)
     })
@@ -55,7 +48,7 @@ class Swarm {
       }
     }
 
-    stats.minSteps = dot.goal ? dot.brain.step : '-'
+    stats.minSteps = dot.hasHitGoal ? dot.brain.step : '-'
 
     return dot
   }
@@ -82,8 +75,8 @@ class Swarm {
     this.fitnessSum = this.dots.reduce((acc, dot) => acc + dot.fitness, 0)
   }
 
-  update() {
-    this.dots.forEach(dot => dot.update())
+  update(goal, obstacle, bounds) {
+    this.dots.forEach(dot => dot.update(goal, obstacle, bounds))
   }
 
   draw(ctx) {
@@ -93,7 +86,7 @@ class Swarm {
   allStopped() {
     const len = this.dots.length
     for (let i = 0; i < len; i++) {
-      if (!this.dots[i].dead && !this.dots[i].goal) {
+      if (!this.dots[i].isDead && !this.dots[i].hasHitGoal) {
         return false
       }
     }

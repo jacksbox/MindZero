@@ -39,7 +39,7 @@ class Brain {
     this.directions = this.directions.map(vec2 => {
       if (sequence > 0 || Math.random() < threshold) {
         sequence = sequence > 0 ? sequence-- : maxSequence
-        return new Vec2(randDist(), randDist())
+        return new Vec2(randomDir(2), randomDir(2))
       }
       return vec2
     })

@@ -1,15 +1,23 @@
+import Bounds from './Bounds'
 import Swarm from './Swarm'
 import Goal from './Goal'
+import Obstacle from './Obstacle'
 import stats from './Stats'
 
 const canvas = document.getElementById('canvas')
 const ctx = canvas.getContext('2d')
+
+const bounds = new Bounds(800, 800)
+canvas.width = bounds.w
+canvas.height = bounds.h
 
 const swarm1 = new Swarm(500, 'purple')
 const swarm2 = new Swarm(500, 'black')
 const swarm3 = new Swarm(500, 'orange')
 
 const goal = new Goal(400, 80, 6, 'red')
+
+const obstacle = new Obstacle(100, 300, 600, 10)
 
 let gen = 0
 
@@ -24,19 +32,14 @@ const run = () => {
     stats.gen++
     stats.update(swarm1, swarm2, swarm3)
   } else {
-    ctx.clearRect(0, 0, 800, 800)
+    bounds.clear(ctx)
 
-
-    ctx.beginPath();
-    ctx.rect(100, 300, 600, 10, 2 * Math.PI);
-    ctx.fillStyle = 'blue';
-    ctx.fill();
-
+    obstacle.draw(ctx)
     goal.draw(ctx)
 
-    swarm1.update()
-    swarm2.update()
-    swarm3.update()
+    swarm1.update(goal, obstacle, bounds)
+    swarm2.update(goal, obstacle, bounds)
+    swarm3.update(goal, obstacle, bounds)
     swarm1.draw(ctx)
     swarm2.draw(ctx)
     swarm3.draw(ctx)
