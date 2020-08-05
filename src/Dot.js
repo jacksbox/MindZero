@@ -1,19 +1,13 @@
 import Brain from './Brain'
 
-import {  vAdd, vLimit, vDist } from './Vector'
+import Vec2 from './Vec2'
 
 class Dot {
   constructor(x, y, ctx, maxStep) {
-    this.start = { x, y }
+    this.start = new Vec2(x, y)
     this.size = 4
-    this.pos = {
-       x,
-       y
-    }
-    this.vel = {
-      x: 0,
-      y: 0
-    }
+    this.pos = new Vec2(x, y)
+    this.vel = new Vec2()
     this.ctx = ctx
     this.brain = new Brain(maxStep)
     this.dead = false
@@ -63,15 +57,15 @@ class Dot {
       this.dead = true
       return
     }
-    vAdd(this.vel, this.brain.get())
-    vLimit(this.vel, 4)
-    vAdd(this.pos, this.vel)
+    this.vel.add(this.brain.get())
+    this.vel.limit(4)
+    this.pos.add(this.vel)
 
     this.brain.next()
   }
 
   calcFitness() {
-    this.fitness = this.goal ? 1 : 1 / Math.pow(vDist(this.pos, { x: 400, y: 80 }), 2)
+    this.fitness = this.goal ? 1 : 1 / Math.pow(this.pos.distance(new Vec2(400, 80)), 2)
     if (this.hitObstacle) {
       this.fitness /= 2
     } else

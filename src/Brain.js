@@ -1,12 +1,14 @@
-const rand = (min, max) => (Math.random() * max) + min
+const randomDir = max => (Math.random() * max) - 1
 
 const len = 500
 
 let id = 0
 
+import Vec2 from './Vec2'
+
 class Brain {
   constructor(maxStep = len - 1) {
-    this.directions = (new Array(len)).fill(null).map(() => ({ x: rand(0, 2) - 1, y: rand(0, 2) - 1 }))
+    this.directions = (new Array(len)).fill(null).map(() => new Vec2(randomDir(2), randomDir(2)))
     this.step = 0
     this.maxStep = maxStep
     this.id = id++
@@ -25,7 +27,7 @@ class Brain {
 
   clone() {
     const theClone = new Brain()
-    theClone.directions = this.directions.map(({ x, y }) => ({ x, y }))
+    theClone.directions = this.directions.map(vec2 => vec2.clone())
     return theClone
   }
 
@@ -34,15 +36,12 @@ class Brain {
     // const maxSequence = hasHitGoal ? Math.floor(rand(0, 3)) : Math.floor(rand(0,8))
     const maxSequence = 0
     let sequence = 0
-    this.directions = this.directions.map(v => {
+    this.directions = this.directions.map(vec2 => {
       if (sequence > 0 || Math.random() < threshold) {
         sequence = sequence > 0 ? sequence-- : maxSequence
-        return {
-          x: rand(0, 2) - 1,
-          y: rand(0, 2) - 1
-        }
+        return new Vec2(randDist(), randDist())
       }
-      return v
+      return vec2
     })
   }
 }
