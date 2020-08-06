@@ -26,9 +26,10 @@ class Dot {
       ctx.strokeStyle = 'green';
       ctx.lineWidth = 4;
       ctx.stroke();
-    } else {
-      ctx.fillStyle = color;
     }
+
+    ctx.fillStyle = color;
+
     ctx.fill();
   }
 

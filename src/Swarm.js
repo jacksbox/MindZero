@@ -82,8 +82,12 @@ class Swarm {
     this.dots.forEach(dot => dot.update(goal, obstacle, bounds))
   }
 
-  draw(ctx) {
-    this.dots.forEach(dot => dot.draw(this.color, ctx))
+  draw(showOnlyPrimus, ctx) {
+    this.dots.forEach(dot => {
+      if ((showOnlyPrimus && dot.primus) || !showOnlyPrimus) {
+        dot.draw(this.color, ctx)
+      }
+    })
   }
 
   allStopped() {

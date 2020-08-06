@@ -25,9 +25,17 @@ const swarms = [
 
 const goal = new Goal(400, 80, 6, 'red')
 
-const obstacle = new Obstacle(100, 300, 600, 10)
+const obstacle = new Obstacle(100, 300, 500, 10)
 
 stats.init(swarms)
+
+
+const togglePrimusBtn = document.getElementById('onlyPrimus')
+
+let showOnlyPrimus = false
+togglePrimusBtn.addEventListener('change', e => {
+  showOnlyPrimus = e.target.checked
+})
 
 
 const run = () => {
@@ -42,7 +50,7 @@ const run = () => {
 
     swarms.forEach(swarm => {
       swarm.update(goal, obstacle, bounds)
-      swarm.draw(ctx)
+      swarm.draw(showOnlyPrimus, ctx)
     })
   }
 
