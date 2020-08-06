@@ -4,8 +4,24 @@
   <body style="width: 100vw; height: 100vh;">
     <div style="display: flex;">
       <div style="width: 200px;">
-        Generation: <span id="gen" style="padding: 10px"></span>
-        <div id="steps" style="width: 120px; display: flex;">
+        <div style="margin-bottom: 10px;">
+          <label for="onlyPrimus">
+            Show only Primus
+            <input
+              type="checkbox"
+              name="onlyPrimus"
+              id="onlyPrimus"
+              value="true"
+            />
+          </label>
+        </div>
+        <div>
+          Generation:
+          <div id="gen" style="padding: 10px;"></div>
+        </div>
+        <div>
+          Steps to goal:
+          <div id="steps" style="width: 120px; display: flex;"></div>
         </div>
       </div>
       <div style="width: 800px;">
