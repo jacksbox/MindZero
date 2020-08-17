@@ -14,7 +14,7 @@ class Stats {
     this.gen++
     document.getElementById('gen').innerHTML = this.gen
     this.population.swarms.forEach(swarm => {
-      document.getElementById(swarm.color).innerHTML = swarm.stepsInBestTry ? swarm.stepsInBestTry : '-'
+      document.getElementById(swarm.color).innerHTML = swarm.stepsPrimus ? swarm.stepsPrimus : '-'
     })
   }
 

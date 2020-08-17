@@ -20,7 +20,39 @@ const origin = new Vec2(400, 700)
 let population = null
 let swarms = null
 let goal = null
-let obstacle = null
+let obstacles = null
+
+const rand = max => Math.random() * max
+const getObstacle = () => {
+  const x = rand(bounds.w)
+  const y = rand(bounds.h)
+  const dir = Math.random() >= 0.5
+  const w = dir ? 10 : rand(bounds.w - x)
+  const h = dir ? rand(bounds.h - y) : 10
+  let o = new Obstacle(x, y, w, h)
+  if(o.checkCollisionWith(goal), o.checkCollisionWith(origin)) {
+    o = getObstacle()
+  }
+  return o
+}
+
+
+goal = new Goal(400, 80, 6, 'red')
+
+
+// asymetric
+// obstacles = [
+//   new Obstacle(100, 300, 500, 10),
+//   new Obstacle(500, 500, 200, 10),
+// ]
+// symetric
+// obstacles = [
+//   new Obstacle(100, 300, 600, 10)
+// ]
+// random
+obstacles = [
+  ...Array(Math.ceil(Math.random() * 20)).fill(null).map(() => getObstacle())
+]
 
 const init = (twoParentMode = false) => {
 
@@ -31,10 +63,6 @@ const init = (twoParentMode = false) => {
     new Swarm({ size: 500, initialStepLimit: 500, color: 'gray', origin }),
   ]
   population = new Population(swarms, twoParentMode)
-
-  goal = new Goal(400, 80, 6, 'red')
-
-  obstacle = new Obstacle(100, 300, 500, 10)
 
   stats.init(population)
 }
@@ -61,10 +89,10 @@ const run = () => {
   } else {
     bounds.clear(ctx)
 
-    obstacle.draw(ctx)
+    obstacles.forEach(obstacle => obstacle.draw(ctx))
     goal.draw(ctx)
 
-    population.update(goal, obstacle, bounds)
+    population.update(goal, obstacles, bounds)
     population.draw(showOnlyPrimus, ctx)
   }
 

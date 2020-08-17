@@ -33,14 +33,14 @@ class Dot {
     ctx.fill();
   }
 
-  update(goal, obstacle, bounds) {
+  update(goal, obstacles, bounds) {
     if(!this.isDead && !this.reachedGoal) {
       this.move()
 
       if (bounds.isOutOfBounds(this.pos)) {
         this.isDead = true
       } else
-      if (obstacle.checkCollisionWith(this.pos)) {
+      if (obstacles.some(obstacle => obstacle.checkCollisionWith(this.pos))) {
         this.isDead = true
         this.hitObstacle = true
       } else

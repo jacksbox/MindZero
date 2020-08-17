@@ -17,7 +17,7 @@ class Population {
   }
 
   evolve() {
-    if (!twoParentMode) {
+    if (!this.twoParentMode) {
       this.swarms.forEach((swarm) => swarm.evolve());
     } else {
       let newStepLimit = null
@@ -47,6 +47,7 @@ class Population {
         primusChild.primus = true;
 
         const newSwarm = swarm.clone()
+        newSwarm.stepsPrimus = primus.reachedGoal ? primus.brain.step + 1 : primus.brain.stepLimit
         newSwarm.stepsInBestTry = newStepLimit;
 
         newSwarm.dots = swarm.dots.map(() => {

@@ -1,5 +1,4 @@
 import Dot from './Dot'
-import stats from './Stats'
 
 const rand = max => Math.random() * max
 
@@ -11,6 +10,7 @@ class Swarm {
     this.origin = origin
     this.dots = (new Array(this.size)).fill(null).map(() => new Dot(origin.x, origin.y, initialStepLimit))
 
+    this.stepsPrimus = null
     this.stepsInBestTry = null
 
     this.fitness = 0
@@ -31,6 +31,7 @@ class Swarm {
     primusChild.brain.id = primus.brain.id
     primusChild.primus = true
 
+    this.stepsPrimus = primus.reachedGoal ? primus.brain.step + 1 : primus.brain.stepLimit
     this.stepsInBestTry = newStepLimit
 
     this.dots = this.dots.map(() => {
@@ -83,8 +84,8 @@ class Swarm {
     this.fitnessSum = this.dots.reduce((acc, dot) => acc + dot.fitness, 0)
   }
 
-  update(goal, obstacle, bounds) {
-    this.dots.forEach(dot => dot.update(goal, obstacle, bounds))
+  update(...params) {
+    this.dots.forEach(dot => dot.update(...params))
   }
 
   draw(showOnlyPrimus, ctx) {
