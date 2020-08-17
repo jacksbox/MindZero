@@ -23,7 +23,8 @@ let goal = null
 let obstacles = null
 
 const randFloor = max => Math.floor(Math.random() * max)
-const getObstacle = () => {
+
+const getRandomObstacle = () => {
   const x = randFloor(bounds.w)
   const y = randFloor(bounds.h)
   const dir = Math.random() >= 0.5
@@ -36,20 +37,28 @@ const getObstacle = () => {
   return o
 }
 
-const getObstacles = () => {
+const getRandomObstacles = () => {
+  const obstacles = Array(Math.ceil(Math.random() * 20)).fill(null).map(() => getRandomObstacle())
+  window.location.hash = obstacles.map(obstacle =>
+    `${obstacle.pos.x},${obstacle.pos.y},${obstacle.w},${obstacle.h}`).join(':')
+  return obstacles
+}
+
+const getHashEncodedObstacles = () => {
+  const hash = window.location.hash.substring(1); //Puts hash in variable, and removes the # character
+  const obstacleCodes = hash.split(':')
+  const obstacles = obstacleCodes.map(code => {
+    const params = code.split(',').map(p => parseInt(p))
+    return new Obstacle(...params)
+  })
+  return obstacles
+}
+
+const initObstacles = () => {
   if(window.location.hash) {
-    const hash = window.location.hash.substring(1); //Puts hash in variable, and removes the # character
-    const obstacleCodes = hash.split(':')
-    const obstacles = obstacleCodes.map(code => {
-      const params = code.split(',').map(p => parseInt(p))
-      return new Obstacle(...params)
-    })
-    return obstacles
+    return getHashEncodedObstacles()
   } else {
-    const obstacles = Array(Math.ceil(Math.random() * 20)).fill(null).map(() => getObstacle())
-    window.location.hash = obstacles.map(obstacle =>
-      `${obstacle.pos.x},${obstacle.pos.y},${obstacle.w},${obstacle.h}`).join(':')
-    return obstacles
+    return getRandomObstacles()
   }
 }
 
@@ -66,9 +75,12 @@ goal = new Goal(400, 80, 6, 'red')
 //   new Obstacle(100, 300, 600, 10)
 // ]
 // random
-obstacles = getObstacles()
+obstacles = initObstacles()
 
 const init = (twoParentMode = false) => {
+  if (!obstacles) {
+    obstacles = getRandomObstacles()
+  }
 
   swarms = [
     new Swarm({ size: 500, initialStepLimit: 500, color: 'purple', origin }),
@@ -92,6 +104,12 @@ const toggleTwoParentMode = document.getElementById('twoParentMode')
 let twoParentMode = false
 toggleTwoParentMode.addEventListener('change', e => {
   twoParentMode = e.target.checked
+  init(twoParentMode)
+})
+
+const rerollObstacles = document.getElementById('rerollObstacles')
+rerollObstacles.addEventListener('click', () => {
+  obstacles = null
   init(twoParentMode)
 })
 
