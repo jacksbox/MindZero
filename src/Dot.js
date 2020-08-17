@@ -70,6 +70,15 @@ class Dot {
     }
   }
 
+  clone() {
+    // no directions in childs brain
+    const dotClone = new Dot(this.start.x, this.start.y, 0)
+    // clone with step limit
+    dotClone.brain = this.brain.clone()
+
+    return dotClone
+  }
+
   getChild(newStepLimit) {
     // no directions in childs brain
     const child = new Dot(this.start.x, this.start.y, 0)

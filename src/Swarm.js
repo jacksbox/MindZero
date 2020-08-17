@@ -4,7 +4,7 @@ import stats from './Stats'
 const rand = max => Math.random() * max
 
 class Swarm {
-  constructor(size, initialStepLimit, color, origin) {
+  constructor({ size, initialStepLimit, color, origin }) {
     this.size = size
     this.initialStepLimit = initialStepLimit
     this.color = color
@@ -12,6 +12,9 @@ class Swarm {
     this.dots = (new Array(this.size)).fill(null).map(() => new Dot(origin.x, origin.y, initialStepLimit))
 
     this.stepsInBestTry = null
+
+    this.fitness = 0
+    this.fitnessSum = 0
   }
 
   evolve() {
@@ -68,6 +71,8 @@ class Swarm {
         return this.dots[i];
       }
     }
+
+    console.error('(Swarm).selectParent out of bounds')
   }
 
   calcFitness() {
@@ -98,6 +103,12 @@ class Swarm {
       }
     }
     return true
+  }
+
+  clone() {
+    const swarmClone = Object.assign( Object.create( Object.getPrototypeOf(this)), this)
+    swarmClone.dots = swarmClone.dots.map(dot => dot.clone())
+    return swarmClone
   }
 }
 

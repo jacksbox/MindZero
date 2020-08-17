@@ -1,4 +1,5 @@
 import Bounds from './Bounds'
+import Population from './Population'
 import Swarm from './Swarm'
 import Goal from './Goal'
 import Obstacle from './Obstacle'
@@ -16,31 +17,46 @@ canvas.height = bounds.h
 
 const origin = new Vec2(400, 700)
 
-const swarms = [
-  new Swarm(500, 500, 'purple', origin),
-  new Swarm(500, 500, 'black', origin),
-  new Swarm(500, 500, 'orange', origin),
-  new Swarm(500, 500, 'gray', origin),
-]
+let population = null
+let swarms = null
+let goal = null
+let obstacle = null
 
-const goal = new Goal(400, 80, 6, 'red')
+const init = (twoParentMode = false) => {
 
-const obstacle = new Obstacle(100, 300, 500, 10)
+  swarms = [
+    new Swarm({ size: 500, initialStepLimit: 500, color: 'purple', origin }),
+    new Swarm({ size: 500, initialStepLimit: 500, color: 'black', origin }),
+    new Swarm({ size: 500, initialStepLimit: 500, color: 'orange', origin }),
+    new Swarm({ size: 500, initialStepLimit: 500, color: 'gray', origin }),
+  ]
+  population = new Population(swarms, twoParentMode)
 
-stats.init(swarms)
+  goal = new Goal(400, 80, 6, 'red')
+
+  obstacle = new Obstacle(100, 300, 500, 10)
+
+  stats.init(population)
+}
 
 
 const togglePrimusBtn = document.getElementById('onlyPrimus')
-
 let showOnlyPrimus = false
 togglePrimusBtn.addEventListener('change', e => {
   showOnlyPrimus = e.target.checked
 })
 
+const toggleTwoParentMode = document.getElementById('twoParentMode')
+let twoParentMode = false
+toggleTwoParentMode.addEventListener('change', e => {
+  twoParentMode = e.target.checked
+  init(twoParentMode)
+})
+
 
 const run = () => {
-  if (swarms.every(swarm => swarm.allStopped())) {
-    swarms.forEach(swarm => swarm.evolve())
+  if (population.allStopped()) {
+    population.evolve()
     stats.update()
   } else {
     bounds.clear(ctx)
@@ -48,13 +64,12 @@ const run = () => {
     obstacle.draw(ctx)
     goal.draw(ctx)
 
-    swarms.forEach(swarm => {
-      swarm.update(goal, obstacle, bounds)
-      swarm.draw(showOnlyPrimus, ctx)
-    })
+    population.update(goal, obstacle, bounds)
+    population.draw(showOnlyPrimus, ctx)
   }
 
   window.requestAnimationFrame(run);
 }
 
+init()
 run()
