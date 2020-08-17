@@ -61,9 +61,9 @@ class Dot {
   }
 
   calcFitness() {
-    this.fitness = this.reachedGoal ? 1 : 1 / Math.pow(this.pos.distance(new Vec2(400, 80)), 2)
+    this.fitness = 1 / Math.sqrt(this.pos.distance(new Vec2(400, 80)))
     if (this.hitObstacle) {
-      this.fitness /= 2
+      this.fitness /= 4
     } else
     if (this.reachedGoal) {
       this.fitness = this.fitness * 1.5 + +  100 / (this.brain.step * this.brain.step)
@@ -73,7 +73,7 @@ class Dot {
   clone() {
     // no directions in childs brain
     const dotClone = new Dot(this.start.x, this.start.y, 0)
-    // clone with step limit
+    // clone without step limit
     dotClone.brain = this.brain.clone()
 
     return dotClone
