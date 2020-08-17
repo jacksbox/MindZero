@@ -20,24 +20,27 @@ class Population {
     if (!twoParentMode) {
       this.swarms.forEach((swarm) => swarm.evolve());
     } else {
+      let newStepLimit = null
       this.swarms.forEach(swarm => {
         swarm.calcFitness();
         swarm.calcFitnessSum();
+
+        const primus = swarm.selectPrimus();
+        // evolved dots only can do 1.2 times the amount of steps of this swarms primus
+        const swarmStepLimit = Math.min(
+          Math.floor(
+            (primus.reachedGoal
+              ? primus.brain.step + 1
+              : primus.brain.stepLimit) * 1.2
+          ),
+          swarm.initialStepLimit
+        );
+        newStepLimit = newStepLimit ? Math.min(newStepLimit, swarmStepLimit): swarmStepLimit
       })
       const evolvedSwarms = []
       this.swarms.forEach((swarm, index) => {
-
         const primus = swarm.selectPrimus();
-        // evolved dots only can do 1.2 times the amount of steps of the primus
-        // const newStepLimit = Math.min(
-        //   Math.floor(
-        //     (primus.reachedGoal
-        //       ? primus.brain.step + 1
-        //       : primus.brain.stepLimit) * 1.2
-        //   ),
-        //   swarm.initialStepLimit
-        // );
-        const newStepLimit = 500
+        // const newStepLimit = 500
         const primusChild = primus.getChild(newStepLimit);
 
         primusChild.brain.id = primus.brain.id;
