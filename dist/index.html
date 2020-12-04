@@ -1,47 +1,48 @@
 <!DOCTYPE html>
 <html lang="de">
   <head> </head>
-  <body style="width: 100vw; height: 100vh;">
-    <div style="display: flex;">
-      <div style="width: 200px;">
-        <div style="margin-bottom: 10px;">
-          Use two Parents
+  <body style="width: 100vw; height: 100vh">
+    <div style="display: flex">
+      <div style="width: 200px">
+        <div>
+          Generation:
+          <div id="gen" style="padding: 10px"></div>
+        </div>
+        <div>
+          Steps to goal:
+          <div id="steps" style="width: 120px; display: flex"></div>
+        </div>
+        <hr />
+        <div style="margin-bottom: 10px">
           <input
             type="checkbox"
             name="twoParentMode"
             id="twoParentMode"
             value="true"
           />
+          Use two Parents <small>(restarts)</small>
         </div>
-        <div style="margin-bottom: 10px;">
+        <div style="margin-bottom: 10px">
           <label for="onlyPrimus">
-            Show only Primus
             <input
               type="checkbox"
               name="onlyPrimus"
               id="onlyPrimus"
               value="true"
             />
+            Show only Primus
           </label>
         </div>
-        <div style="margin-bottom: 10px;">
+        <div style="margin-bottom: 10px">
           <button id="rerollObstacles">Randomize Obstacles</button>
         </div>
-        <div>
-          Generation:
-          <div id="gen" style="padding: 10px;"></div>
-        </div>
-        <div>
-          Steps to goal:
-          <div id="steps" style="width: 120px; display: flex;"></div>
-        </div>
       </div>
-      <div style="width: 800px;">
+      <div style="width: 800px">
         <canvas
           id="canvas"
           width="800"
           height="800"
-          style="border: 1px solid black;"
+          style="border: 1px solid black"
         ></canvas>
       </div>
     </div>

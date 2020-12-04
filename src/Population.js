@@ -20,24 +20,28 @@ class Population {
     if (!this.twoParentMode) {
       this.swarms.forEach((swarm) => swarm.evolve());
     } else {
-      let newStepLimit = null
-      this.swarms.forEach(swarm => {
+      let newStepLimit = null;
+      this.swarms.forEach((swarm) => {
         swarm.calcFitness();
         swarm.calcFitnessSum();
 
         const primus = swarm.selectPrimus();
-        // evolved dots only can do 1.2 times the amount of steps of this swarms primus
         const swarmStepLimit = Math.min(
-          Math.floor(
-            (primus.reachedGoal
-              ? primus.brain.step + 1
-              : primus.brain.stepLimit) * 1.2
+          Math.min(
+            Math.floor(
+              (primus.reachedGoal
+                ? primus.brain.step + 1
+                : primus.brain.stepLimit) * 1.2
+            ),
+            swarm.initialStepLimit
           ),
-          swarm.initialStepLimit
+          primus.brain.stepLimit
         );
-        newStepLimit = newStepLimit ? Math.min(newStepLimit, swarmStepLimit): swarmStepLimit
-      })
-      const evolvedSwarms = []
+        newStepLimit = newStepLimit
+          ? Math.min(newStepLimit, swarmStepLimit)
+          : swarmStepLimit;
+      });
+      const evolvedSwarms = [];
       this.swarms.forEach((swarm, index) => {
         const primus = swarm.selectPrimus();
         // const newStepLimit = 500
@@ -46,40 +50,42 @@ class Population {
         primusChild.brain.id = primus.brain.id;
         primusChild.primus = true;
 
-        const newSwarm = swarm.clone()
-        newSwarm.stepsPrimus = primus.reachedGoal ? primus.brain.step + 1 : primus.brain.stepLimit
+        const newSwarm = swarm.clone();
+        newSwarm.stepsPrimus = primus.reachedGoal
+          ? primus.brain.step + 1
+          : primus.brain.stepLimit;
         newSwarm.stepsInBestTry = newStepLimit;
 
         newSwarm.dots = swarm.dots.map(() => {
           const mother = swarm.selectParent();
-          const fatherSwarm = this.swarms[(index + 1) % this.swarms.length]
+          const fatherSwarm = this.swarms[(index + 1) % this.swarms.length];
           const father = fatherSwarm.selectParent();
           const child = this.getChildFromParents(mother, father, newStepLimit);
-          return child
+          return child;
         });
 
         newSwarm.mutate();
 
         newSwarm.dots[newSwarm.dots.length - 1] = primusChild;
 
-        evolvedSwarms.push(newSwarm)
+        evolvedSwarms.push(newSwarm);
       });
-      this.swarms = evolvedSwarms
+      this.swarms = evolvedSwarms;
     }
   }
 
   getChildFromParents(mother, father, newStepLimit) {
-    const dot = mother.getChild(newStepLimit)
+    const dot = mother.getChild(newStepLimit);
 
     // console.log(dot, mother, father)
     dot.brain.directions = dot.brain.directions.map((direction, index) => {
       if (Math.random() >= 0.5) {
-        return father.brain.directions[index].clone()
+        return father.brain.directions[index].clone();
       }
-      return direction.clone()
-    })
+      return direction.clone();
+    });
 
-    return dot
+    return dot;
   }
 }
 

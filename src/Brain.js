@@ -1,48 +1,50 @@
-const randomDir = max => (Math.random() * max) - 1
+const randomDir = (max) => Math.random() * max - 1;
 
-let id = 0
+let id = 0;
 
-import Vec2 from './Vec2'
+import Vec2 from "./Vec2";
 
 class Brain {
   constructor(stepLimit) {
-    this.directions = (new Array(stepLimit)).fill(null).map(() => new Vec2(randomDir(2), randomDir(2)))
-    this.stepLimit = stepLimit
-    this.step = 0
-    this.id = id++
+    this.directions = new Array(stepLimit)
+      .fill(null)
+      .map(() => new Vec2(randomDir(2), randomDir(2)));
+    this.stepLimit = stepLimit;
+    this.step = 0;
+    this.id = id++;
   }
 
   isEmpty() {
-    return this.step === this.stepLimit - 1
+    return this.step >= this.stepLimit - 1;
   }
 
   next() {
-    const vec2 = this.directions[this.step]
-    this.step++
-    return vec2
+    const vec2 = this.directions[this.step];
+    this.step++;
+    return vec2;
   }
 
   clone(stepLimit = null) {
-    const brainClone = new Brain(0)
+    const brainClone = new Brain(0);
     brainClone.directions = stepLimit
-      ? this.directions.slice(0, stepLimit).map(vec2 => vec2.clone())
-      : this.directions.map(vec2 => vec2.clone())
-    return brainClone
+      ? this.directions.slice(0, stepLimit).map((vec2) => vec2.clone())
+      : this.directions.map((vec2) => vec2.clone());
+    return brainClone;
   }
 
   mutate(hasHitGoal) {
-    const mutationRate = hasHitGoal ? 0.005 : 0.01
+    const mutationRate = hasHitGoal ? 0.005 : 0.01;
     // const maxSequence = hasHitGoal ? Math.floor(rand(0, 3)) : Math.floor(rand(0,8))
-    const maxSequence = 0
-    let sequence = 0
-    this.directions = this.directions.map(vec2 => {
+    const maxSequence = 0;
+    let sequence = 0;
+    this.directions = this.directions.map((vec2) => {
       if (sequence > 0 || Math.random() < mutationRate) {
-        sequence = sequence > 0 ? sequence-- : maxSequence
-        return new Vec2(randomDir(2), randomDir(2))
+        sequence = sequence > 0 ? sequence-- : maxSequence;
+        return new Vec2(randomDir(2), randomDir(2));
       }
-      return vec2
-    })
+      return vec2;
+    });
   }
 }
 
-export default Brain
+export default Brain;
